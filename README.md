@@ -18,6 +18,7 @@ A Smooth Scroll Parallax animation featuring a zoom with a sticky container. Mad
   - [Set default font family to Inter](#set-default-font-family-to-inter)
 - [Test set up](#test-set-up)
 - [Start Loacal Server](#start-loacal-server)
+- [Adding a smooth scroll](#adding-a-smooth-scroll)
 
 
 ## Set up
@@ -177,5 +178,24 @@ export default function Home() {
 ```bash
 
 npm run dev
+
+```
+
+## Adding a smooth scroll
+
+We can make this animation first by first adding a smooth scroll. There are many ways of doing this and it's not necessary for the animation, but I personally like it.
+
+```bash
+
+  useEffect(() => {
+    const lenis = new Lenis();
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+  }, []);
 
 ```
