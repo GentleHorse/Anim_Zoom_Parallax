@@ -20,6 +20,7 @@ A Smooth Scroll Parallax animation featuring a zoom with a sticky container. Mad
 - [Start Loacal Server](#start-loacal-server)
 - [Adding a smooth scroll](#adding-a-smooth-scroll)
 - [The root component setup (`page.js`)](#the-root-component-setup-pagejs)
+- [The Basics](#the-basics)
 
 ## Set up
 
@@ -237,6 +238,93 @@ export default function Home() {
 .main {
     margin-top: 50vh;
     margin-bottom: 100vh;
+}
+
+```
+
+## The Basics
+
+Here's the basics of making this animations. We want to have a main container with a long scroll, something like `300vh` and inside of it have a `sticky` container of `100vh` that will stick throughout the whole length of its parent.
+
+<br />
+
+Then we can track the progress of the scroll and scale all our divs consequently.
+
+```bash
+
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start start", "end end"],
+  });
+
+```
+
+The full code looks like this;
+
+```bash
+
+import { useRef } from "react";
+import Image from "next/image";
+import { motion, useScroll, useTransform } from "framer-motion";
+import styles from "./ZoomParallax.module.scss";
+import Picture1 from "../../public/images/1.jpeg";
+
+export default function ZoomParallax() {
+  const container = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start start", "end end"],
+  });
+
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 4]);
+
+  return (
+    <div ref={container} className={styles.container}>
+      <div className={styles.sticky}>
+        <motion.div style={{ scale }} className={styles.el}>
+          <div className={styles.imageContainer}>
+            <Image src={Picture1} fill alt="image" placeholder="blur" />
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+```
+
+```bash
+
+.container {
+  height: 300vh;
+  position: relative;
+
+  .sticky {
+    position: sticky;
+    overflow: hidden;
+    top: 0;
+    height: 100vh;
+
+    .el {
+      width: 100%;
+      height: 100%;
+      top: 0;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .imageContainer {
+        position: relative;
+        width: 25vw;
+        height: 25vh;
+
+        img {
+          object-fit: cover;
+        }
+      }
+    }
+  }
 }
 
 ```
