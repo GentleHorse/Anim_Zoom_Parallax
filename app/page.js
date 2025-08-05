@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 import styles from "./page.module.scss";
+import ZoomParallax from "@/components/zoomParallax/ZoomParallax.jsx";
 
 export default function Home() {
   useEffect(() => {
@@ -18,7 +19,7 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <h1>This is &quot;Home&quot; page</h1>
+      <ZoomParallax />
     </main>
   );
 }

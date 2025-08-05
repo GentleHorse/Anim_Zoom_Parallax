@@ -19,7 +19,7 @@ A Smooth Scroll Parallax animation featuring a zoom with a sticky container. Mad
 - [Test set up](#test-set-up)
 - [Start Loacal Server](#start-loacal-server)
 - [Adding a smooth scroll](#adding-a-smooth-scroll)
-
+- [The root component setup (`page.js`)](#the-root-component-setup-pagejs)
 
 ## Set up
 
@@ -197,5 +197,46 @@ We can make this animation first by first adding a smooth scroll. There are many
 
     requestAnimationFrame(raf);
   }, []);
+
+```
+
+## The root component setup (`page.js`)
+
+```bash
+
+"use client";
+
+import { useEffect } from "react";
+import Lenis from "lenis";
+import styles from "./page.module.scss";
+import ZoomParallax from "@/components/zoomParallax/ZoomParallax.jsx";
+
+export default function Home() {
+  useEffect(() => {
+    const lenis = new Lenis();
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+  }, []);
+
+  return (
+    <main className={styles.main}>
+      <ZoomParallax />
+    </main>
+  );
+}
+
+```
+
+```bash
+
+.main {
+    margin-top: 50vh;
+    margin-bottom: 100vh;
+}
 
 ```
