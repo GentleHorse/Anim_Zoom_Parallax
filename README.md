@@ -21,6 +21,7 @@ A Smooth Scroll Parallax animation featuring a zoom with a sticky container. Mad
 - [Adding a smooth scroll](#adding-a-smooth-scroll)
 - [The root component setup (`page.js`)](#the-root-component-setup-pagejs)
 - [The Basics](#the-basics)
+- [Adding the other images](#adding-the-other-images)
 
 ## Set up
 
@@ -259,6 +260,14 @@ Then we can track the progress of the scroll and scale all our divs consequently
 
 ```
 
+Since the `imageContainer` has a width and height of `25vw` and `25vh`, all we have to do is scale it from `1` to `4` to make the image take the full screen at any screen size.
+
+```bash
+
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 4]);
+
+```
+
 The full code looks like this;
 
 ```bash
@@ -328,3 +337,117 @@ export default function ZoomParallax() {
 }
 
 ```
+
+![screenshot 01](/public/images/screenshot-01.jpg) <br />
+
+![video 01](/public/videos/video-01.gif)
+
+## Adding the other images
+
+To make the code extra clean, we create an array of images with different scale values. I can then simply loop that array to render all the images.
+
+```bash
+
+  const scaleA = useTransform(scrollYProgress, [0, 1], [1, 4]);
+  const scaleB = useTransform(scrollYProgress, [0, 1], [1, 5]);
+  const scaleC = useTransform(scrollYProgress, [0, 1], [1, 6]);
+  const scaleD = useTransform(scrollYProgress, [0, 1], [1, 8]);
+  const scaleE = useTransform(scrollYProgress, [0, 1], [1, 9]);
+
+  const pictures = [
+    { src: Picture1, scale: scaleA },
+    { src: Picture2, scale: scaleB },
+    { src: Picture3, scale: scaleC },
+    { src: Picture4, scale: scaleB },
+    { src: Picture5, scale: scaleC },
+    { src: Picture6, scale: scaleD },
+    { src: Picture7, scale: scaleE },
+  ];
+
+```
+
+Now that we have a clean structure, we can simply loop the array and render all my images. Most of the work is then done in CSS to place all the images correctly.
+
+<br />
+
+To avoid making the divs overlap on top of each others as they are scaling, we're actually **scaling the `el` and not the `imageContainer`**. That way, the scaling is more natural and is keeping it's original layout.
+
+```bash
+
+    <div ref={container} className={styles.container}>
+      <div className={styles.sticky}>
+        {pictures.map(({ src, scale }, i) => (
+          <motion.div style={{ scale }} className={styles.el}>
+            <div className={styles.imageContainer}>
+              <Image src={src} fill alt="image" placeholder="blur" />
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+
+```
+
+```bash
+
+      .imageContainer {
+        position: relative;
+        width: 25vw;
+        height: 25vh;
+
+        img {
+          object-fit: cover;
+        }
+      }
+
+      &:nth-of-type(2) {
+        .imageContainer {
+          top: -30vh;
+          left: 5vw;
+          width: 35vw;
+          height: 30vh;
+        }
+      }
+      &:nth-of-type(3) {
+        .imageContainer {
+          top: -10vh;
+          left: -25vw;
+          width: 20vw;
+          height: 45vh;
+        }
+      }
+      &:nth-of-type(4) {
+        .imageContainer {
+          left: 27.5vw;
+          width: 25vw;
+          height: 25vh;
+        }
+      }
+      &:nth-of-type(5) {
+        .imageContainer {
+          top: 27.5vh;
+          left: 5vw;
+          width: 20vw;
+          height: 25vh;
+        }
+      }
+      &:nth-of-type(6) {
+        .imageContainer {
+          top: 27.5vh;
+          left: -22.5vw;
+          width: 30vw;
+          height: 25vh;
+        }
+      }
+      &:nth-of-type(7) {
+        .imageContainer {
+          top: 22.5vh;
+          left: 25vw;
+          width: 15vw;
+          height: 15vh;
+        }
+      }
+
+```
+
+![video 02](/public/videos/video-02.gif)
